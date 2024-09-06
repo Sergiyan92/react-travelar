@@ -12,50 +12,24 @@ const FavoritePlaces = ({ label, list, children }) => {
     );
   };
 
-  const handleKeyDown = (event) => {
-    if (event.altKey && event.key === "Enter") {
-      console.log("alt pressed");
-    }
-  };
-
   return (
-    <div
-      className="px-6"
-      onClick={() => console.log("click1")}
-      onKeyDown={handleKeyDown}
-      tabIndex="0" // Додає фокус для обробки події keydown
-    >
-      <div
-        className="text-gray mb-4"
-        onClick={(e) => {
-          e.stopPropagation();
-          console.log("click2");
-        }}
-      >
-        Додані маркери
-      </div>
+    <div className="px-6">
+      <div className="text-gray mb-4">Додані маркери</div>
       <div className="py-5">
         <Input label="Some label" />
-        <a
-          href="/"
-          className="text-black"
-          onClick={(e) => {
-            e.preventDefault();
-            console.log("prevented");
-          }}
-        >
-          Click me
+        <a href="/" className="text-black">
+          CLick me
         </a>
       </div>
-      {/* Слот для label */}
-      {label && <div>{label}</div>}
-      {/* Слот для списку або рендеринг елементів FavoritePlace */}
-      {list
-        ? list
-        : [...Array(4)].map((_, index) => <FavoritePlace key={index} />)}
-      {/* Основний слот */}
+      {label}
+      {list &&
+        [...Array(4)].map((_, index) => {
+          <li key={index}>
+            <FavoritePlace />
+          </li>;
+        })}
+
       {children}
-      {/* Кнопка з динамічним варіантом */}
       <IButton
         className="w-full mt-10"
         variant={buttonVariant}
