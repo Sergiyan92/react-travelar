@@ -1,6 +1,7 @@
 import { useState } from "react";
 import IButton from "../../IButton/IButton";
 import Input from "../../Input/Input";
+import FormContainer from "../FormContainer";
 
 const RegisterForm = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -18,9 +19,10 @@ const RegisterForm = ({ onSubmit }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(formData);
+    setFormData({ name: "", email: "", password: "" });
   };
   return (
-    <form
+    <FormContainer
       className="max-w-[500px] w-full bg-white p-10 rounded-2xl"
       onSubmit={handleSubmit}
     >
@@ -33,6 +35,7 @@ const RegisterForm = ({ onSubmit }) => {
         value={formData.name}
       />
       <Input
+        type="email"
         name="email"
         className="mb-4"
         label="Електронна пошта"
@@ -51,7 +54,7 @@ const RegisterForm = ({ onSubmit }) => {
       <IButton className="mt-10 w-full" variant="gradient" type="submit">
         Створити аккаунт
       </IButton>
-    </form>
+    </FormContainer>
   );
 };
 

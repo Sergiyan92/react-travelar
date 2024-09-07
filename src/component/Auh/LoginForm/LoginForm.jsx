@@ -1,4 +1,4 @@
-import {  useState } from "react";
+import { useState } from "react";
 import Input from "../../Input/Input";
 import IButton from "../../IButton/IButton";
 import FormContainer from "../FormContainer";
@@ -20,6 +20,7 @@ const LoginForm = ({ onSubmit }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(formData);
+    setFormData({ email: "", password: "" });
   };
   return (
     <FormContainer onSubmit={handleSubmit}>
