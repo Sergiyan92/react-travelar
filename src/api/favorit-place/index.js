@@ -1,19 +1,19 @@
-import { ClientFetch } from "../ClientFetch";
+import { clientFetch } from "../clientFetch";
 
 const BASE_PLACES_URL = "/points";
 
 export const getFavoritePlaces = () => {
-  ClientFetch.get(BASE_PLACES_URL);
+  return clientFetch.get(BASE_PLACES_URL);
 };
 
 export const addFavoritePlace = (body) => {
-  ClientFetch.post(BASE_PLACES_URL, body);
+  return clientFetch.post(BASE_PLACES_URL, body);
 };
 
 export const updateFavoritePlace = (body) => {
-  ClientFetch.put(BASE_PLACES_URL, body);
+  return clientFetch.put(BASE_PLACES_URL, body);
 };
 
 export const deleteFavoritePlace = (body) => {
-  ClientFetch.put(BASE_PLACES_URL, body);
+  return clientFetch.put(BASE_PLACES_URL, body);
 };

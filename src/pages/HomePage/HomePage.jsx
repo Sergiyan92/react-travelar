@@ -1,27 +1,13 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import FavoritePlaces from "../../component/FavoritPlaces/FavoritPlaces";
 import { Map, Marker, NavigationControl } from "react-map-gl";
 import { mapSettings } from "../../component/map/settings";
-import MarkerIcon from '../../component/icons/MarkerIcon.svg'
+import MarkerIcon from "../../component/icons/MarkerIcon.svg";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { getFavoritePlaces } from "../../api/favorit-place";
 
-const favoritePlaces = [
-  {
-    id: 1,
-    title: "New place 1",
-    description: "Super description 1",
-    img: "",
-    lngLat: [30.523333, 50.490001],
-  },
-  {
-    id: 2,
-    title: "New place 2",
-    description: "Super description 2",
-    img: "",
-    lngLat: [30.523333, 50.450001],
-  },
-];
 const HomePage = () => {
+  const [favoritePlaces, setFavoritePlaces] = useState([]);
   const [activeId, setActiveId] = useState(null);
   const [viewport, setViewport] = useState({
     longitude: 30.523333,
@@ -29,6 +15,20 @@ const HomePage = () => {
     zoom: 10,
   });
   const mapRef = useRef(null);
+
+  useEffect(() => {
+    const fetchFavoritePlaces = async () => {
+      try {
+        const { data } = await getFavoritePlaces();
+        console.log(data);
+        setFavoritePlaces(data);
+      } catch (error) {
+        console.error("Error fetching favorite places:", error);
+      }
+    };
+
+    fetchFavoritePlaces();
+  }, []);
 
   const changeActiveId = (id) => {
     setActiveId(id);
@@ -59,7 +59,7 @@ const HomePage = () => {
           ref={mapRef}
         >
           <NavigationControl position="top-left" />
-          {favoritePlaces.map((place) => (
+          {favoritePlaces?.map((place) => (
             <Marker
               key={place.id}
               longitude={place.lngLat[0]}

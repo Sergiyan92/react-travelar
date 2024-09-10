@@ -3,10 +3,11 @@ import IButton from "../IButton/IButton";
 
 const FavoritePlaces = ({ items, activeId, onPlaceClicked }) => {
   return (
-    <div className="px-6">
+    <div className="px-6 text-black">
       <div className="text-gray mb-4">Додані маркери</div>
       <ul>
-        {items.map((item) => {
+        {items?.length === 0 && <div>Список порожній</div>}
+        {items?.map((item) => {
           return (
             <li key={item.id}>
               <FavoritePlace

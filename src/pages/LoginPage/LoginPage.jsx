@@ -1,24 +1,25 @@
-import { useState } from "react";
 import LoginForm from "../../component/Auh/LoginForm/LoginForm";
 import { useNavigate } from "react-router-dom";
-import { login } from "../../api/user";
+import { useMutation } from "../../custom-hook/useMutation";
+import { authService } from "../../api/authService";
 
 const LoginPage = () => {
-  const [isLoading, setIsLoading] = useState(false);
-
   const navigate = useNavigate();
 
-  const handleLoginUser = async (data) => {
-    setIsLoading(true);
-    try {
-      await login(data);
-      navigate("/map");
-    } catch (error) {
-      console.error(error);
-    }finally{
-      setIsLoading(false)
-    }
-  };
-  return <LoginForm onSubmit={handleLoginUser} isLoading={isLoading}/>;
+  const {
+    isLoading,
+    error,
+    mutation: handleLoginUser,
+  } = useMutation({
+    mutationFn: (data) => authService.login(data),
+    onSuccess: () => navigate("/map"),
+  });
+
+  return (
+    <>
+      {error && <div className="text-red-500">{error.message}</div>}
+      <LoginForm onSubmit={handleLoginUser} isLoading={isLoading} />
+    </>
+  );
 };
 export default LoginPage;
