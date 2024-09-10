@@ -1,9 +1,8 @@
 import { useState } from "react";
 import Input from "../../Input/Input";
 import IButton from "../../IButton/IButton";
-import FormContainer from "../FormContainer";
 
-const LoginForm = ({ onSubmit }) => {
+const LoginForm = ({ onSubmit,isLoading }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -23,7 +22,7 @@ const LoginForm = ({ onSubmit }) => {
     setFormData({ email: "", password: "" });
   };
   return (
-    <FormContainer onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit}>
       <Input
         className="mb-4"
         name="email"
@@ -31,6 +30,7 @@ const LoginForm = ({ onSubmit }) => {
         value={formData.email}
         onChange={handleChange}
         type="email"
+        placeholder="Електронна пошта"
       />
       <Input
         value={formData.password}
@@ -38,11 +38,12 @@ const LoginForm = ({ onSubmit }) => {
         name="password"
         onChange={handleChange}
         type="password"
+        placeholder="Пароль"
       />
-      <IButton className="mt-10 w-full" variant="gradient" type="submit">
+      <IButton className="mt-10 w-full" variant="gradient" type="submit" isLoading={isLoading}>
         Логін
       </IButton>
-    </FormContainer>
+    </form>
   );
 };
 

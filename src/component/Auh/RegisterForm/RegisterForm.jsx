@@ -1,9 +1,8 @@
 import { useState } from "react";
 import IButton from "../../IButton/IButton";
 import Input from "../../Input/Input";
-import FormContainer from "../FormContainer";
 
-const RegisterForm = ({ onSubmit }) => {
+const RegisterForm = ({ onSubmit ,isLoading}) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -22,10 +21,7 @@ const RegisterForm = ({ onSubmit }) => {
     setFormData({ name: "", email: "", password: "" });
   };
   return (
-    <FormContainer
-      className="max-w-[500px] w-full bg-white p-10 rounded-2xl"
-      onSubmit={handleSubmit}
-    >
+    <form onSubmit={handleSubmit}>
       <Input
         name="name"
         className="mb-4"
@@ -51,10 +47,10 @@ const RegisterForm = ({ onSubmit }) => {
         onChange={handleChange}
         value={formData.password}
       />
-      <IButton className="mt-10 w-full" variant="gradient" type="submit">
+      <IButton isLoading={isLoading} className="mt-10 w-full" variant="gradient" type="submit">
         Створити аккаунт
       </IButton>
-    </FormContainer>
+    </form>
   );
 };
 

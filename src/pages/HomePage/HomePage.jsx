@@ -1,26 +1,78 @@
-import IButton from "../../component/IButton/IButton";
-import mapImage from "../../assets/img/static-map.png";
-import markerIcon from "../../assets/img/map-pin.svg";
+import { useRef, useState } from "react";
+import FavoritePlaces from "../../component/FavoritPlaces/FavoritPlaces";
+import { Map, Marker, NavigationControl } from "react-map-gl";
+import { mapSettings } from "../../component/map/settings";
+import MarkerIcon from '../../component/icons/MarkerIcon.svg'
+import "mapbox-gl/dist/mapbox-gl.css";
 
+const favoritePlaces = [
+  {
+    id: 1,
+    title: "New place 1",
+    description: "Super description 1",
+    img: "",
+    lngLat: [30.523333, 50.490001],
+  },
+  {
+    id: 2,
+    title: "New place 2",
+    description: "Super description 2",
+    img: "",
+    lngLat: [30.523333, 50.450001],
+  },
+];
 const HomePage = () => {
+  const [activeId, setActiveId] = useState(null);
+  const [viewport, setViewport] = useState({
+    longitude: 30.523333,
+    latitude: 50.450001,
+    zoom: 10,
+  });
+  const mapRef = useRef(null);
+
+  const changeActiveId = (id) => {
+    setActiveId(id);
+  };
+
+  const changePlace = (id) => {
+    const { lngLat } = favoritePlaces.find((place) => place.id === id);
+    console.log(lngLat);
+    changeActiveId(id);
+    mapRef.current?.flyTo({ center: lngLat });
+  };
   return (
-    <main className="flex h-screen">
-      <section className="flex-1 flex justify-center items-center px-5 bg-primary">
-        <div className="text-white text-center">
-          <img className="inline mb-6" src={markerIcon} alt="Marker icon" />
-          <h1 className="font-bold text-4xl mb-7">IT traveler</h1>
-          <p className="leading-6 mb-11">
-            Простий і зручний веб додаток, який дозволить тобі відмічати твої
-            улюблені місця, а також ті, в яких би ти дуже хотів побувати. Тож не
-            зволікай і спробуй сам.
-          </p>
-          <IButton>Почати роботу</IButton>
-        </div>
-      </section>
-      <section className="flex-1">
-        <img className="h-full w-full object-cover" src={mapImage} alt="Map" />
-      </section>
-    </main>
+    <div className="flex h-screen">
+      <div className="bg-white h-full w-[400px] shrink-0 overflow-auto pb-10">
+        <FavoritePlaces
+          items={favoritePlaces}
+          activeId={activeId}
+          onPlaceClicked={changePlace}
+        />
+      </div>
+      <div className="w-full h-full">
+        <Map
+          {...viewport}
+          mapStyle={mapSettings.style}
+          mapboxAccessToken={mapSettings.apiToken}
+          style={{ width: "100%", height: "100%" }}
+          onMove={(evt) => setViewport(evt.viewState)}
+          ref={mapRef}
+        >
+          <NavigationControl position="top-left" />
+          {favoritePlaces.map((place) => (
+            <Marker
+              key={place.id}
+              longitude={place.lngLat[0]}
+              latitude={place.lngLat[1]}
+            >
+              <button onClick={() => changeActiveId(place.id)}>
+                <img src={MarkerIcon} alt="" className="h-8 w-8" />
+              </button>
+            </Marker>
+          ))}
+        </Map>
+      </div>
+    </div>
   );
 };
 
