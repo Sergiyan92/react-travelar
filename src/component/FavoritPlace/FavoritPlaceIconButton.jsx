@@ -1,6 +1,6 @@
-const FavoritPlaceIconButton = ({ children }) => {
+const FavoritPlaceIconButton = ({onClick, children }) => {
   return (
-    <button className="text-gray cursor-pointer hover:text-primary">
+    <button className="text-gray cursor-pointer hover:text-primary" onClick={onClick}>
       {children}
     </button>
   );

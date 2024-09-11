@@ -1,10 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import FavoritePlaces from "../../component/FavoritPlaces/FavoritPlaces";
-import { Map, Marker, NavigationControl } from "react-map-gl";
-import { mapSettings } from "../../component/map/settings";
-import MarkerIcon from "../../component/icons/MarkerIcon.svg";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { getFavoritePlaces } from "../../api/favorit-place";
+import { Map, Marker, NavigationControl } from "react-map-gl";
+import FavoritePlaces from "../../component/FavoritPlaces/FavoritPlaces";
+import { mapSettings } from "../../component/map/settings";
+import MarkerIcon from "../../component/icons/MarkerIcon.jsx";
+import { getFavoritePlaces, addFavoritePlace } from "../../api/favorit-place";
+import { useModal } from "../../custom-hook/useModal";
+import CreateNewPlaceModal from "../../component/CreateNewPlaceModal/CreateNewPlaceModal";
+import { useMutation } from "../../custom-hook/useMutation";
 
 const HomePage = () => {
   const [favoritePlaces, setFavoritePlaces] = useState([]);
@@ -14,32 +17,60 @@ const HomePage = () => {
     latitude: 50.450001,
     zoom: 10,
   });
+  const [mapMarkerLngLat, setMapMarkerLngLat] = useState(null);
+  const { isOpen, closeModal, openModal } = useModal();
   const mapRef = useRef(null);
 
+  const fetchFavoritePlaces = async () => {
+    try {
+      const data = await getFavoritePlaces();
+      setFavoritePlaces(data);
+    } catch (error) {
+      console.error("Error fetching favorite places:", error);
+    }
+  };
   useEffect(() => {
-    const fetchFavoritePlaces = async () => {
-      try {
-        const { data } = await getFavoritePlaces();
-        console.log(data);
-        setFavoritePlaces(data);
-      } catch (error) {
-        console.error("Error fetching favorite places:", error);
-      }
-    };
-
     fetchFavoritePlaces();
   }, []);
+
+  const {
+    mutation: addPlace,
+    isLoading: isAddingPlace,
+    error,
+  } = useMutation({
+    mutationFn: (newData) => addFavoritePlace(newData),
+    onSuccess: () => {
+      closeModal();
+      setMapMarkerLngLat(null);
+      fetchFavoritePlaces(); // Trigger refetch after adding a place
+    },
+  });
+
+  const handleAddPlace = async (formData) => {
+    console.log(formData);
+    const body = {
+      ...formData,
+      coordinates: mapMarkerLngLat,
+    };
+
+    await addPlace(body);
+  };
 
   const changeActiveId = (id) => {
     setActiveId(id);
   };
 
   const changePlace = (id) => {
-    const { lngLat } = favoritePlaces.find((place) => place.id === id);
-    console.log(lngLat);
+    const { coordinates } = favoritePlaces.find((place) => place.id === id);
     changeActiveId(id);
-    mapRef.current?.flyTo({ center: lngLat });
+    mapRef.current?.flyTo({ center: coordinates });
   };
+
+  const handleMapClick = (event) => {
+    const { lng, lat } = event.lngLat;
+    setMapMarkerLngLat([lng, lat]);
+  };
+
   return (
     <div className="flex h-screen">
       <div className="bg-white h-full w-[400px] shrink-0 overflow-auto pb-10">
@@ -47,6 +78,15 @@ const HomePage = () => {
           items={favoritePlaces}
           activeId={activeId}
           onPlaceClicked={changePlace}
+          openModal={openModal}
+          onUpdated={fetchFavoritePlaces}
+        />
+        <CreateNewPlaceModal
+          isOpen={isOpen}
+          onClose={closeModal}
+          isLoading={isAddingPlace}
+          error={error}
+          onSubmit={handleAddPlace}
         />
       </div>
       <div className="w-full h-full">
@@ -55,18 +95,29 @@ const HomePage = () => {
           mapStyle={mapSettings.style}
           mapboxAccessToken={mapSettings.apiToken}
           style={{ width: "100%", height: "100%" }}
+          onClick={handleMapClick}
           onMove={(evt) => setViewport(evt.viewState)}
           ref={mapRef}
         >
           <NavigationControl position="top-left" />
+
+          {mapMarkerLngLat && (
+            <Marker
+              longitude={mapMarkerLngLat[0]}
+              latitude={mapMarkerLngLat[1]}
+            >
+              <MarkerIcon className="h-8 w-8" isActive={true} />
+            </Marker>
+          )}
+
           {favoritePlaces?.map((place) => (
             <Marker
               key={place.id}
-              longitude={place.lngLat[0]}
-              latitude={place.lngLat[1]}
+              longitude={place.coordinates[0]}
+              latitude={place.coordinates[1]}
             >
               <button onClick={() => changeActiveId(place.id)}>
-                <img src={MarkerIcon} alt="" className="h-8 w-8" />
+                <MarkerIcon className="h-8 w-8" />
               </button>
             </Marker>
           ))}

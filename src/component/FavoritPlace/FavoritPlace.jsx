@@ -2,7 +2,15 @@ import FavoritPlaceIconButton from "./FavoritPlaceIconButton";
 import DeleteIcon from "./DeleteIcon.svg";
 import EditIcon from "./EditIcon.svg";
 
-const FavoritePlace = ({ img, description, title, isActive, onClick }) => {
+const FavoritePlace = ({
+  img,
+  description,
+  title,
+  isActive,
+  delet,
+  edit,
+  onClick,
+}) => {
   return (
     <section className="text-gray mb-6 last:mb-0">
       <div className="flex gap-4" onClick={onClick}>
@@ -11,10 +19,10 @@ const FavoritePlace = ({ img, description, title, isActive, onClick }) => {
           <div className="flex justify-between items-center mb-2">
             <h2 className="font-bold text-sm text-[#2C2C2C]">{title}</h2>
             <div className="flex gap-2">
-              <FavoritPlaceIconButton>
+              <FavoritPlaceIconButton onClick={edit}>
                 <img src={EditIcon} alt="EditIcon" />
               </FavoritPlaceIconButton>
-              <FavoritPlaceIconButton>
+              <FavoritPlaceIconButton onClick={delet}>
                 <img src={DeleteIcon} alt="DeleteIcon" />
               </FavoritPlaceIconButton>
             </div>

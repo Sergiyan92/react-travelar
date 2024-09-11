@@ -3,9 +3,15 @@ import IButton from "../IButton/IButton";
 import IModal from "../IModal/IModal";
 import Input from "../Input/Input";
 import InputImage from "../InputImage/InputImage";
-import MarkerIcon from "../icons/MarkerIcon.svg";
+import MarkerIcon from "../icons/MarkerIcon.jsx";
 
-const CreateNewPlaceModal = ({ isOpen, onClose, onSubmit }) => {
+const CreateNewPlaceModal = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  isLoading,
+  error,
+}) => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -17,7 +23,7 @@ const CreateNewPlaceModal = ({ isOpen, onClose, onSubmit }) => {
       ? "Натисніть тут, щоб змінити фото"
       : "Натисніть тут, щоб додати фото";
   }, [formData.img]);
-  
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -45,7 +51,7 @@ const CreateNewPlaceModal = ({ isOpen, onClose, onSubmit }) => {
     <IModal onClose={onClose}>
       <form onSubmit={handleSubmit} className="min-w-[420px]">
         <div className="flex gap-1 justify-center font-bold text-center mb-10">
-          <img src={MarkerIcon} alt="MarkerIcon" /> Додати маркер
+          <MarkerIcon /> Додати маркер
         </div>
         <Input
           label="Локація"
@@ -63,14 +69,19 @@ const CreateNewPlaceModal = ({ isOpen, onClose, onSubmit }) => {
           onChange={handleInputChange}
         />
         {formData.img && (
-          <img src={formData.img} alt="" className="w-[100px] h-[100px] object-cover" />
+          <img
+            src={formData.img}
+            alt=""
+            className="w-[100px] h-[100px] object-cover"
+          />
         )}
         <InputImage className="mb-10" onUpload={handleUpload}>
           {uploadText}
         </InputImage>
-        <IButton className="w-full" variant="gradient">
+        <IButton className="w-full" variant="gradient" isLoading={isLoading}>
           Додати
         </IButton>
+        {error && <div className="text-red-500">Щось пішло не так</div>}
       </form>
     </IModal>
   );
