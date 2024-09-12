@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { clientFetch } from "../clientFetch";
+import { ClientFetch } from "../ClientFetch";
 
 export const TOKEN_KEY = "token";
 
@@ -25,27 +25,27 @@ class AuthService {
   }
 
   async login(body) {
-    const { data } = await clientFetch.post("/user/login", body);
+    const { data } = await ClientFetch.post("/user/login", body);
     const { accessToken } = data;
 
     this.setToken(accessToken);
   }
 
   async registerUser(body) {
-    const { data } = await clientFetch.post("/user/register", body);
+    const { data } = await ClientFetch.post("/user/register", body);
     const { accessToken } = data;
 
     this.setToken(accessToken);
   }
 
   async logout() {
-    await clientFetch.get("/user/logout");
+    await ClientFetch.get("/user/logout");
 
     this.clearToken();
   }
 
   async refresh() {
-    const { data } = await clientFetch.get("/user/refresh");
+    const { data } = await ClientFetch.get("/user/refresh");
     const { accessToken } = data;
 
     this.setToken(accessToken);
@@ -54,7 +54,7 @@ class AuthService {
 
 export const authService = new AuthService();
 
-clientFetch.interceptors.request.use((request) => {
+ClientFetch.interceptors.request.use((request) => {
   const token = authService.getToken();
 
   if (token) {
@@ -67,7 +67,7 @@ clientFetch.interceptors.request.use((request) => {
   return request;
 });
 
-clientFetch.interceptors.response.use(
+ClientFetch.interceptors.response.use(
   (response) => response,
   async (error) => {
     const errorCode = error.response?.status;
@@ -76,7 +76,7 @@ clientFetch.interceptors.response.use(
       try {
         const newToken = await authService.refresh();
         error.config.headers["Authorization"] = `Bearer ${newToken}`;
-        return clientFetch.request(error.config);
+        return ClientFetch.request(error.config);
       } catch (e) {
         authService.clearToken();
         const navigate = useNavigate();
