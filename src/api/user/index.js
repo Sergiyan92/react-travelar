@@ -1,17 +1,20 @@
-import { ClientFetch } from "../ClientFetch";
+import { clientFetch } from "../clientFetch";
 
 export const login = (body) => {
-  return ClientFetch.post("/user/login", body);
+  return clientFetch.post("/user/login", body);
 };
 
 export const registerUser = (body) => {
-  return ClientFetch.post("/user/register", body);
+  return clientFetch.post("/user/register", body);
 };
 
 export const logout = () => {
-  return ClientFetch.get("/user/logout");
+  return clientFetch.get("/user/logout");
 };
 
 export const refresh = () => {
-  return ClientFetch.get("/user/refresh");
+  return clientFetch.get("/user/refresh");
+};
+export const getUserInfo = () => {
+  return clientFetch.get("/user/me");
 };

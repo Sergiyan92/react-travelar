@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { clientFetch } from "../clientFetch";
 
 export const TOKEN_KEY = "token";
@@ -69,12 +70,17 @@ clientFetch.interceptors.request.use((request) => {
 clientFetch.interceptors.response.use(
   (response) => response,
   async (error) => {
-    const errorCode = error.response.status;
+    const errorCode = error.response?.status;
 
-    if (errorCode === 401) {
+    if (errorCode === 401 && authService.getToken()) {
       try {
-        return await authService.refresh();
+        const newToken = await authService.refresh();
+        error.config.headers["Authorization"] = `Bearer ${newToken}`;
+        return clientFetch.request(error.config);
       } catch (e) {
+        authService.clearToken();
+        const navigate = useNavigate();
+        navigate("/auth/login");
         return Promise.reject(e);
       }
     }

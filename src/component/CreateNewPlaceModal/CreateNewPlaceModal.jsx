@@ -4,6 +4,7 @@ import IModal from "../IModal/IModal";
 import Input from "../Input/Input";
 import InputImage from "../InputImage/InputImage";
 import MarkerIcon from "../icons/MarkerIcon.jsx";
+import Ukraine from "../../assets/img/ukraine.png";
 
 const CreateNewPlaceModal = ({
   isOpen,
@@ -41,7 +42,7 @@ const CreateNewPlaceModal = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(formData);
+    onSubmit({ ...formData, img: formData.img || Ukraine });
     setFormData({ title: "", description: "", img: "" });
     onClose();
   };
@@ -70,7 +71,7 @@ const CreateNewPlaceModal = ({
         />
         {formData.img && (
           <img
-            src={formData.img}
+            src={formData.img || Ukraine}
             alt=""
             className="w-[100px] h-[100px] object-cover"
           />

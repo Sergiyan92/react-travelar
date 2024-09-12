@@ -8,6 +8,7 @@ import { getFavoritePlaces, addFavoritePlace } from "../../api/favorit-place";
 import { useModal } from "../../custom-hook/useModal";
 import CreateNewPlaceModal from "../../component/CreateNewPlaceModal/CreateNewPlaceModal";
 import { useMutation } from "../../custom-hook/useMutation";
+import UserInfo from "../../component/UserInfo/UserInfo.jsx";
 
 const HomePage = () => {
   const [favoritePlaces, setFavoritePlaces] = useState([]);
@@ -47,7 +48,6 @@ const HomePage = () => {
   });
 
   const handleAddPlace = async (formData) => {
-    console.log(formData);
     const body = {
       ...formData,
       coordinates: mapMarkerLngLat,
@@ -74,6 +74,7 @@ const HomePage = () => {
   return (
     <div className="flex h-screen">
       <div className="bg-white h-full w-[400px] shrink-0 overflow-auto pb-10">
+        <UserInfo />
         <FavoritePlaces
           items={favoritePlaces}
           activeId={activeId}
@@ -81,6 +82,7 @@ const HomePage = () => {
           openModal={openModal}
           onUpdated={fetchFavoritePlaces}
         />
+
         <CreateNewPlaceModal
           isOpen={isOpen}
           onClose={closeModal}

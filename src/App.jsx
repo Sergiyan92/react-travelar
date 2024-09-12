@@ -1,5 +1,7 @@
 import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
+import PrivateRoute from "./PrivateRoute";
+import RestrictedRoute from "./RestrictedRoute";
 
 const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
 const GreetingPage = lazy(() => import("./pages/GreetingPage/GreetingPage"));
@@ -12,11 +14,26 @@ function App() {
     <Suspense fallback={<div>Loading...</div>}>
       <Routes>
         <Route path="/" element={<GreetingPage />} />
-        <Route path="/map" element={<HomePage />} />
+        <Route
+          path="/map"
+          element={
+            <PrivateRoute component={<HomePage />} redirectTo="/auth/login" />
+          }
+        />
         <Route path="/auth" element={<AuthPage />}>
-        <Route index element={<Navigate to="login" replace />} />
-          <Route path="login" element={<LoginPage />} />
-          <Route path="register" element={<RegisterPage />} />
+          <Route index element={<Navigate to="login" replace />} />
+          <Route
+            path="login"
+            element={
+              <RestrictedRoute component={<LoginPage />} redirectTo="/map" />
+            }
+          />
+          <Route
+            path="register"
+            element={
+              <RestrictedRoute component={<RegisterPage />} redirectTo="/map" />
+            }
+          />
         </Route>
       </Routes>
     </Suspense>
