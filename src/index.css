@@ -11,8 +11,21 @@ a {
   color: #646cff;
   text-decoration: inherit;
 }
-
-
+.yellow {
+  fill: #ffd500;
+}
+.blue {
+  fill: #005bbb;
+}
+.st0 {
+  fill: #fefefe;
+}
+.st1 {
+  fill: #c8102e;
+}
+.st2 {
+  fill: #012169;
+}
 
 li{
   list-style: none;
