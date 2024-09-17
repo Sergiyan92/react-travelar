@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import IButton from "../IButton/IButton";
 import IModal from "../IModal/IModal";
 
@@ -9,17 +10,18 @@ const ConfirmationModal = ({
   cancel,
   confirm,
 }) => {
+  const { t } = useTranslation();
   if (!isOpen) return;
   return (
     <IModal onClose={cancel}>
       <div className="mb-4 text-lg">{title}</div>
       <div className="flex gap-3 justify-center">
-        <IButton onClick={cancel}>Відхилити</IButton>
+        <IButton onClick={cancel}>{t("reject")}</IButton>
         <IButton variant="gradient" isLoading={isLoading} onClick={confirm}>
-          Підтвердити
+          {t("confirm")}
         </IButton>
       </div>
-      {hasError && <div className="text-red-500">Щось пішло не так</div>}
+      {hasError && <div className="text-red-500">{t("wrong")}</div>}
     </IModal>
   );
 };

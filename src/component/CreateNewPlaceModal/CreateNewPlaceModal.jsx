@@ -5,6 +5,7 @@ import Input from "../Input/Input";
 import InputImage from "../InputImage/InputImage";
 import MarkerIcon from "../icons/MarkerIcon.jsx";
 import Ukraine from "../../assets/img/ukraine.png";
+import { useTranslation } from "react-i18next";
 
 const CreateNewPlaceModal = ({
   isOpen,
@@ -18,12 +19,11 @@ const CreateNewPlaceModal = ({
     description: "",
     img: "",
   });
+  const { t } = useTranslation();
 
   const uploadText = useMemo(() => {
-    return formData.img
-      ? "Натисніть тут, щоб змінити фото"
-      : "Натисніть тут, щоб додати фото";
-  }, [formData.img]);
+    return formData.img ? t("change photo") : t("add photo");
+  }, [formData.img, t]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -52,17 +52,17 @@ const CreateNewPlaceModal = ({
     <IModal onClose={onClose}>
       <form onSubmit={handleSubmit} className="min-w-[420px]">
         <div className="flex gap-1 justify-center font-bold text-center mb-10">
-          <MarkerIcon /> Додати маркер
+          <MarkerIcon /> { t('add marker') }
         </div>
         <Input
-          label="Локація"
+          label={t('location')}
           className="mb-4"
           name="title"
           value={formData.title}
           onChange={handleInputChange}
         />
         <Input
-          label="Опис"
+          label={t('description')}
           type="textarea"
           className="mb-2"
           name="description"
@@ -80,9 +80,9 @@ const CreateNewPlaceModal = ({
           {uploadText}
         </InputImage>
         <IButton className="w-full" variant="gradient" isLoading={isLoading}>
-          Додати
+          {t('add')}
         </IButton>
-        {error && <div className="text-red-500">Щось пішло не так</div>}
+        {error && <div className="text-red-500">{t('wrong')}</div>}
       </form>
     </IModal>
   );

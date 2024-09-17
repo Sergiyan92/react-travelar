@@ -1,13 +1,17 @@
 import { useState } from "react";
 import IButton from "../../IButton/IButton";
 import Input from "../../Input/Input";
+import { useTranslation } from "react-i18next";
 
-const RegisterForm = ({ onSubmit ,isLoading}) => {
+const RegisterForm = ({ onSubmit, isLoading }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
   });
+
+  const { t } = useTranslation();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
@@ -25,8 +29,8 @@ const RegisterForm = ({ onSubmit ,isLoading}) => {
       <Input
         name="name"
         className="mb-4"
-        label="Повне ім’я"
-        placeholder="Повне ім’я"
+        label={t("name")}
+        placeholder={t("name")}
         onChange={handleChange}
         value={formData.name}
       />
@@ -34,21 +38,26 @@ const RegisterForm = ({ onSubmit ,isLoading}) => {
         type="email"
         name="email"
         className="mb-4"
-        label="Електронна пошта"
-        placeholder="email@gmail.com"
+        label={t("email")}
+        placeholder={t("email")}
         onChange={handleChange}
         value={formData.email}
       />
       <Input
         name="password"
-        label="Пароль"
-        placeholder="Пароль"
+        label={t("password")}
+        placeholder={t("password")}
         type="password"
         onChange={handleChange}
         value={formData.password}
       />
-      <IButton isLoading={isLoading} className="mt-10 w-full" variant="gradient" type="submit">
-        Створити аккаунт
+      <IButton
+        isLoading={isLoading}
+        className="mt-10 w-full"
+        variant="gradient"
+        type="submit"
+      >
+        {t("create account")}
       </IButton>
     </form>
   );

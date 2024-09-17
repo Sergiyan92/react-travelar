@@ -9,6 +9,7 @@ import {
   updateFavoritePlace,
 } from "../../api/favorit-place";
 import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
+import { useTranslation } from "react-i18next";
 
 const FavoritePlaces = ({
   items,
@@ -16,10 +17,12 @@ const FavoritePlaces = ({
   onPlaceClicked,
   openModal,
   isPlacesLoading,
-  onUpdated, // новий пропс для оновлення списку
+  onUpdated,
 }) => {
   const [idOfDeletedItem, setIdOfDeletedItem] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
+
+  const { t } = useTranslation();
 
   const {
     isOpen: isConfirmationModalOpen,
@@ -31,7 +34,7 @@ const FavoritePlaces = ({
     mutationFn: (formData) => updateFavoritePlace(formData),
     onSuccess: () => {
       closeEditModal();
-      onUpdated(); // Оновити список після редагування
+      onUpdated();
     },
   });
 
@@ -44,7 +47,7 @@ const FavoritePlaces = ({
     onSuccess: () => {
       closeConfirmationModal();
       setIdOfDeletedItem(null);
-      onUpdated(); // Оновити список після видалення
+      onUpdated();
     },
   });
 
@@ -78,9 +81,9 @@ const FavoritePlaces = ({
 
   return (
     <div className="px-6 text-black">
-      <div className="text-gray mb-4">Додані маркери</div>
+      <div className="text-gray mb-4">{t("added markers")}</div>
 
-      {items?.length === 0 && !isPlacesLoading && <div>Список порожній</div>}
+      {items?.length === 0 && !isPlacesLoading && <div>{t("empty list")}</div>}
       <ul>
         {items?.map((item) => (
           <li key={item.id}>
@@ -112,11 +115,11 @@ const FavoritePlaces = ({
         hasError={deleteError}
         cancel={closeConfirmationModal}
         confirm={handleDeletePlace}
-        title="Ви дійсно хочете видалити улюблене місце?"
+        title={t('confirm mess')}
       />
 
       <IButton className="w-full mt-10" variant="gradient" onClick={openModal}>
-        Додати маркер
+        {t('add marker')}
       </IButton>
     </div>
   );

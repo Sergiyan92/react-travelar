@@ -1,12 +1,14 @@
 import { useState } from "react";
 import Input from "../../Input/Input";
 import IButton from "../../IButton/IButton";
+import { useTranslation } from "react-i18next";
 
 const LoginForm = ({ onSubmit,isLoading }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+  const { t } = useTranslation();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,22 +28,22 @@ const LoginForm = ({ onSubmit,isLoading }) => {
       <Input
         className="mb-4"
         name="email"
-        label="Електронна пошта"
+        label={t("email")}
         value={formData.email}
         onChange={handleChange}
         type="email"
-        placeholder="Електронна пошта"
+        placeholder="test@test.com"
       />
       <Input
         value={formData.password}
-        label="Пароль"
+        label={t("password")}
         name="password"
         onChange={handleChange}
         type="password"
-        placeholder="Пароль"
+        placeholder={t("password")}
       />
       <IButton className="mt-10 w-full" variant="gradient" type="submit" isLoading={isLoading}>
-        Логін
+        {t('signin')}
       </IButton>
     </form>
   );

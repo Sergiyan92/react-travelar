@@ -1,10 +1,14 @@
 import { NavLink, Outlet } from "react-router-dom";
 import BaseLayout from "../../component/BaseLoyout/BaseLayout";
+import LanguageSwitcher from "../../component/LanguageSwitcher/LanguageSwitcher";
+import { useTranslation } from "react-i18next";
 
 const AuthPage = () => {
+  const { t } = useTranslation();
   return (
     <BaseLayout>
       <section className="w-full bg-white p-10 rounded-2xl">
+        <LanguageSwitcher />
         <div className="flex justify-center gap-10 mb-10">
           <NavLink
             to="login"
@@ -12,7 +16,7 @@ const AuthPage = () => {
               isActive ? "text-primary" : "text-gray"
             }
           >
-            Увійти
+            {t("signin")}
           </NavLink>
           <NavLink
             to="register"
@@ -20,7 +24,7 @@ const AuthPage = () => {
               isActive ? "text-primary" : "text-gray"
             }
           >
-            Реєстрація
+            {t("create account")}
           </NavLink>
         </div>
         <Outlet />
@@ -29,4 +33,3 @@ const AuthPage = () => {
   );
 };
 export default AuthPage;
-

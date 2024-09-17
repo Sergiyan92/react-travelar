@@ -3,9 +3,12 @@ import { logout } from "../../api/user";
 import { useMutation } from "../../custom-hook/useMutation";
 import LogoutIcon from "./LogoutIcon.svg";
 import { authService } from "../../api/authService";
+import { useTranslation } from "react-i18next";
 
 const LogoutButton = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
   const { mutation: logoutUser, isLoading } = useMutation({
     mutationFn: () => logout(),
     onSuccess: () => {
@@ -19,7 +22,7 @@ const LogoutButton = () => {
       onClick={logoutUser}
     >
       {isLoading && <span>Loading...</span>}
-      Вихід <img src={LogoutIcon} alt="LogoutIcon" />
+      {t('logout')} <img src={LogoutIcon} alt="LogoutIcon" />
     </button>
   );
 };

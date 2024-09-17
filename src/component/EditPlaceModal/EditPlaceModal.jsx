@@ -5,10 +5,12 @@ import IButton from "../IButton/IButton";
 import InputImage from "../InputImage/InputImage";
 import Input from "../Input/Input";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const EditPlaceModal = ({ isOpen, place, isLoading, onClose, onSubmit }) => {
   const [formData, setFormData] = useState(place || {});
-
+  const { t } = useTranslation();
+  
   useEffect(() => {
     setFormData(place || {});
   }, [place]);
@@ -29,7 +31,7 @@ const EditPlaceModal = ({ isOpen, place, isLoading, onClose, onSubmit }) => {
       <div className="w-[750px]">
         <div className="flex gap-2 items-center mb-10">
           <MarkerIcon className="w-[18px] h-[18px]" />
-          <span className="font-bold text-base">Редагувати маркер</span>
+          <span className="font-bold text-base">{t("edit marker")}</span>
         </div>
         <form onSubmit={handleSubmit}>
           <div className="flex gap-5">
@@ -43,7 +45,7 @@ const EditPlaceModal = ({ isOpen, place, isLoading, onClose, onSubmit }) => {
 
             <div className="w-7/12">
               <Input
-                label="Локація"
+                label={t("location")}
                 name="title"
                 value={formData.title || ""}
                 onChange={handleChange}
@@ -51,7 +53,7 @@ const EditPlaceModal = ({ isOpen, place, isLoading, onClose, onSubmit }) => {
               />
               <div className="mt-4">
                 <Input
-                  label="Опис"
+                  label={t("description")}
                   type="textarea"
                   name="description"
                   value={formData.description || ""}
@@ -64,13 +66,13 @@ const EditPlaceModal = ({ isOpen, place, isLoading, onClose, onSubmit }) => {
                 variant="gradient"
                 disabled={isLoading}
               >
-                Зберегти
+                {t("save")}
               </IButton>
             </div>
           </div>
 
           <InputImage className="mt-3">
-            <span className="text-xs">Натисніть тут, щоб додати інше фото</span>
+            <span className="text-xs">{t("add another")}</span>
           </InputImage>
         </form>
       </div>
